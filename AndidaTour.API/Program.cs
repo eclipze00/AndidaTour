@@ -55,6 +55,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IQuoteRequestRepository, QuoteRequestRepository>();
 
 // ── CORS ─────────────────────────────────────────────────
 builder.Services.AddCors(options =>

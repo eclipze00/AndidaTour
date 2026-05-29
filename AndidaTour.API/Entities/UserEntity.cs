@@ -2,6 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AndidaTour.API.Entities;
 
+public enum UserRole
+{
+    Admin,
+    Client
+}
+
 public class UserEntity
 {
     public int Id { get; set; }
@@ -17,6 +23,7 @@ public class UserEntity
 
     [Required]
     public string PasswordHash { get; set; } = string.Empty;
+    public UserRole Role { get; set; } = UserRole.Client;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -24,4 +31,5 @@ public class UserEntity
     public ICollection<ClientEntity> Clients { get; set; } = new List<ClientEntity>();
     public ICollection<FlightQuoteEntity> Quotes { get; set; } = new List<FlightQuoteEntity>();
     public ICollection<PriceAlertEntity> Alerts { get; set; } = new List<PriceAlertEntity>();
+    public ICollection<QuoteRequestEntity> QuoteRequests { get; set; } = new List<QuoteRequestEntity>();
 }

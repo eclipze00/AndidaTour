@@ -35,7 +35,8 @@ public class AuthController : ControllerBase
             token,
             name = user.FirstName,
             userId = user.Id,
-            expiresIn = 28800  // 8 horas em segundos
+            role = user.Role.ToString().ToLower(), // ← adicionar
+            expiresIn = 28800
         });
     }
 
@@ -50,7 +51,8 @@ public class AuthController : ControllerBase
             FirstName = req.FirstName,
             LastName = req.LastName,
             Email = req.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.Password)
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.Password),
+            Role = req.Role?.ToLower() == "admin" ? UserRole.Admin : UserRole.Client // ← adicionar
         };
 
         var created = await _users.CreateAsync(user);
@@ -61,9 +63,14 @@ public class AuthController : ControllerBase
             token,
             name = created.FirstName,
             userId = created.Id,
+            role = created.Role.ToString().ToLower(), // ← adicionar
             expiresIn = 28800
         });
     }
+
+    // Atualizar os records:
+    public record LoginRequest(string Email, string Password);
+    public record RegisterRequest(string FirstName, string LastName, string Email, string Password, string? Role);
 
     // Endpoint para validar se o token ainda é válido
     [HttpGet("me")]

@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<ClientEntity> Clients => Set<ClientEntity>();
     public DbSet<FlightQuoteEntity> Quotes => Set<FlightQuoteEntity>();
     public DbSet<PriceAlertEntity> Alerts => Set<PriceAlertEntity>();
+    public DbSet<QuoteRequestEntity> QuoteRequests => Set<QuoteRequestEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -56,6 +57,17 @@ public class AppDbContext : DbContext
              .WithMany(u => u.Alerts)
              .HasForeignKey(a => a.UserId)
              .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // QuoteRequest
+        modelBuilder.Entity<QuoteRequestEntity>(e =>
+        {
+            e.Property(q => q.AdminPrice).HasColumnType("numeric(18,2)");
+
+            e.HasOne(q => q.ClientUser)
+            .WithMany(u => u.QuoteRequests)
+            .HasForeignKey(q => q.ClientUserId)
+            .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
